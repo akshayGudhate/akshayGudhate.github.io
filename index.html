@@ -24,20 +24,52 @@
       max-width: 1000px;
       margin: auto;
       padding: 40px;
+      line-height: 1.7;
     }
 
-    h1 { font-size: 2.5rem; }
-    h2 { margin-top: 50px; border-bottom: 1px solid var(--border); }
-    p { color: var(--muted); }
+    h1 {
+      font-size: 2.6rem;
+      margin-bottom: 5px;
+    }
 
-    .mono { font-family: 'JetBrains Mono', monospace; color: var(--accent); }
+    h2 {
+      margin-top: 50px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+
+    p {
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+    }
+
+    .header {
+      margin-bottom: 30px;
+    }
+
+    .links a {
+      margin-right: 15px;
+      font-size: 14px;
+      color: var(--accent);
+      text-decoration: none;
+    }
 
     .card {
       background: var(--card);
-      padding: 20px;
       border: 1px solid var(--border);
+      padding: 22px;
       border-radius: 8px;
       margin-top: 15px;
+    }
+
+    ul {
+      padding-left: 18px;
+      color: var(--muted);
     }
 
     .tag {
@@ -49,119 +81,235 @@
       color: var(--muted);
     }
 
-    .toggle {
-      margin-top: 20px;
-      cursor: pointer;
-      font-size: 14px;
-      color: var(--accent);
+    strong {
+      color: var(--text);
     }
-
-    .hidden { display: none; }
-
-    a { color: var(--accent); text-decoration: none; }
   </style>
 </head>
 
 <body>
 
-<h1>Akshay Gudhate</h1>
-<p class="mono">Backend Engineering Lead • Distributed Systems</p>
+<div class="header">
+  <h1>Akshay Gudhate</h1>
+  <p class="mono">Staff / Principal Backend Engineer • Distributed Systems • Messaging Infrastructure</p>
 
-<div class="toggle" onclick="toggleMode()">
-  Switch to <span id="modeLabel">Engineer Mode</span>
+  <div class="links">
+    <a href="mailto:akshay.gudhate@gmail.com">Email</a>
+    <a href="https://github.com/akshayGudhate">GitHub</a>
+    <a href="https://www.linkedin.com/in/akshay-gudhate/">LinkedIn</a>
+    <a href="https://medium.com/@akshaygudhate">Medium</a>
+  </div>
 </div>
 
-<!-- ================= RECRUITER VIEW ================= -->
-<div id="recruiter">
+<!-- ================= SUMMARY ================= -->
 
 <h2>Summary</h2>
 <p>
-Backend Engineering Lead with 8+ years of experience building scalable systems.
-Led development of a real-time messaging platform handling multi-channel automation.
+Backend engineering leader with 8+ years of experience designing and scaling 
+<strong>data-intensive, distributed systems</strong> in high-ownership startup environments.
 </p>
 
-<h2>Key Impact</h2>
-<div class="card">
+<p>
+I operate at the system level — defining architecture, making foundational tradeoffs, and building platforms 
+that evolve from <span class="mono">0 → 1</span> into reliable, production-scale systems.
+</p>
+
+<p>
+Primary architect of <strong>Bitamin</strong>, a real-time messaging and workflow automation platform 
+supporting multi-channel communication (WhatsApp, Instagram) and deep integrations 
+with external systems (Zoho, IndiaMART, Razorpay).
+</p>
+
+<p>
+My work focuses on designing systems that are:
+</p>
+
 <ul>
-<li>Improved message processing latency via system redesign</li>
-<li>Scaled messaging infrastructure for multi-channel workloads</li>
-<li>Led backend architecture for a production-scale platform</li>
+<li>Composable and event-driven</li>
+<li>Operationally simple under scale</li>
+<li>Resilient to integration and downstream failures</li>
+</ul>
+
+<!-- ================= SYSTEM OVERVIEW ================= -->
+
+<h2>System Architecture: Bitamin</h2>
+
+<div class="card">
+<p>
+Bitamin is a distributed platform designed to handle real-time messaging, campaign orchestration, 
+and workflow automation across multiple external channels.
+</p>
+
+<p>
+The system is structured as a set of loosely coupled components connected through an event-driven backbone.
+</p>
+
+<ul>
+<li><strong>Ingress Layer:</strong> Handles webhook ingestion from external platforms with validation and normalization</li>
+
+<li><strong>Messaging Layer:</strong> NATS-based pub/sub system enabling asynchronous, decoupled communication</li>
+
+<li><strong>Processing Layer:</strong> Worker services responsible for business logic execution and state transitions</li>
+
+<li><strong>Workflow Engine:</strong> Executes multi-step automation pipelines (triggers → conditions → actions)</li>
+
+<li><strong>Integration Layer:</strong> Isolated connectors for third-party systems (Zoho, IndiaMART, Razorpay)</li>
+
+<li><strong>Storage Layer:</strong>
+  PostgreSQL for transactional consistency,
+  Redis for caching and ephemeral state
+</li>
 </ul>
 </div>
+
+<!-- ================= REQUEST FLOW ================= -->
+
+<h2>Request Flow</h2>
+
+<div class="card">
+<p class="mono">
+Webhook → Ingestion Service → NATS Topic → Worker → Workflow Engine → Action (Message / API Call)
+</p>
+
+<p>
+This model allows ingestion, processing, and execution to scale independently, while maintaining 
+clear separation of concerns across the system.
+</p>
+</div>
+
+<!-- ================= ENGINEERING DECISIONS ================= -->
+
+<h2>Key Engineering Decisions</h2>
+
+<div class="card">
+<ul>
+
+<li>
+<strong>Migration: RabbitMQ → NATS</strong><br/>
+Shifted to NATS to reduce broker complexity, minimize latency, and simplify routing topology. 
+Prioritized operational simplicity and real-time responsiveness over feature-heavy messaging patterns.
+</li>
+
+<li>
+<strong>Migration: Node.js → Golang</strong><br/>
+Rebuilt critical services in Go to better handle concurrency and high-throughput workloads, 
+reducing resource overhead and improving system predictability under load.
+</li>
+
+<li>
+<strong>Event-Driven Architecture</strong><br/>
+Adopted event-based communication to decouple ingestion, processing, and workflow execution, 
+allowing independent scaling and failure isolation.
+</li>
+
+<li>
+<strong>gRPC for Internal Communication</strong><br/>
+Introduced gRPC for service-to-service calls to reduce latency and enforce stricter interface contracts.
+</li>
+
+<li>
+<strong>Integration Isolation</strong><br/>
+Designed integration layer to prevent third-party failures from impacting core messaging workflows.
+</li>
+
+</ul>
+</div>
+
+<!-- ================= SCALABILITY ================= -->
+
+<h2>Scalability & Reliability</h2>
+
+<div class="card">
+<ul>
+
+<li>
+Designed a <strong>multi-tenant architecture</strong> with logical data isolation, ensuring safe scaling across customers
+</li>
+
+<li>
+Implemented <strong>asynchronous job processing</strong> with retry strategies and failure handling
+</li>
+
+<li>
+Optimized database performance using <strong>indexing, query restructuring, and materialized views</strong>
+</li>
+
+<li>
+Reduced cascading failures by isolating workflows, integrations, and messaging layers
+</li>
+
+<li>
+Designed system components to scale independently based on workload characteristics
+</li>
+
+</ul>
+</div>
+
+<!-- ================= EXPERIENCE ================= -->
 
 <h2>Experience</h2>
+
 <div class="card">
-<b>Technical Project Lead</b><br/>
-Three Matter Labs • 2025–Present
+<strong>Technical Project Lead — Three Matter Labs</strong><br/>
+2025 – Present
+
 <ul>
-<li>Leading system migration to high-performance architecture</li>
-<li>Driving platform scalability and reliability</li>
+<li>Leading system-wide architectural migration to improve throughput and reduce latency</li>
+<li>Defining service boundaries and communication patterns using gRPC</li>
+<li>Driving platform evolution toward high-availability and observability</li>
 </ul>
 </div>
 
 <div class="card">
-<b>Project Lead</b><br/>
-Biz Secure Labs • 2021–2025
+<strong>Project Lead — Biz Secure Labs</strong><br/>
+2021 – 2025
+
 <ul>
-<li>Built backend platform from scratch</li>
-<li>Owned system design and engineering direction</li>
+<li>Built Bitamin platform from initial concept to production-scale system</li>
+<li>Defined core architecture including messaging pipeline and workflow engine</li>
+<li>Led backend engineering practices, system design decisions, and code quality standards</li>
 </ul>
 </div>
 
-</div>
-
-<!-- ================= ENGINEER VIEW ================= -->
-<div id="engineer" class="hidden">
-
-<h2>System Work</h2>
 <div class="card">
-<b>Bitamin Architecture</b>
+<strong>Earlier Roles — IBM & Biz Secure Labs</strong>
+
 <ul>
-<li>Event-driven messaging pipeline</li>
-<li>NATS-based pub/sub system</li>
-<li>Multi-tenant schema design</li>
-<li>Webhook ingestion → queue → workflow engine</li>
+<li>Built and optimized backend systems for enterprise and startup environments</li>
+<li>Worked on SQL-heavy applications and performance-critical services</li>
+<li>Developed strong product and system intuition working closely with stakeholders</li>
 </ul>
 </div>
 
-<h2>Deep Work</h2>
-<div class="card">
-<ul>
-<li>Migration: Node.js → Golang (performance + concurrency)</li>
-<li>RabbitMQ → NATS (low latency, simpler topology)</li>
-<li>gRPC internal communication</li>
-<li>Async job orchestration</li>
-</ul>
-</div>
+<!-- ================= TECH ================= -->
 
 <h2>Tech Stack</h2>
+
 <div>
 <span class="tag">Golang</span>
-<span class="tag">NATS</span>
+<span class="tag">Node.js</span>
 <span class="tag">PostgreSQL</span>
+<span class="tag">MongoDB</span>
 <span class="tag">Redis</span>
+<span class="tag">NATS</span>
+<span class="tag">Kafka</span>
 <span class="tag">Docker</span>
+<span class="tag">AWS</span>
+<span class="tag">Linux</span>
 </div>
 
+<!-- ================= PHILOSOPHY ================= -->
+
+<h2>Engineering Approach</h2>
+
+<div class="card">
+<ul>
+<li>Prefer simple, composable systems over premature complexity</li>
+<li>Design for failure isolation from the start</li>
+<li>Optimize for operational clarity, not just theoretical scalability</li>
+<li>Think in terms of data flow and system boundaries, not just services</li>
+</ul>
 </div>
-
-<script>
-function toggleMode() {
-  const recruiter = document.getElementById("recruiter");
-  const engineer = document.getElementById("engineer");
-  const label = document.getElementById("modeLabel");
-
-  if (recruiter.classList.contains("hidden")) {
-    recruiter.classList.remove("hidden");
-    engineer.classList.add("hidden");
-    label.innerText = "Engineer Mode";
-  } else {
-    recruiter.classList.add("hidden");
-    engineer.classList.remove("hidden");
-    label.innerText = "Recruiter Mode";
-  }
-}
-</script>
 
 </body>
 </html>
