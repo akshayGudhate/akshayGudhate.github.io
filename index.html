@@ -17,211 +17,151 @@
       --border: #30363d;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
       font-family: 'Inter', sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
-      padding: 40px;
       max-width: 1000px;
       margin: auto;
+      padding: 40px;
     }
 
-    h1, h2, h3 {
-      font-weight: 600;
-    }
+    h1 { font-size: 2.5rem; }
+    h2 { margin-top: 50px; border-bottom: 1px solid var(--border); }
+    p { color: var(--muted); }
 
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
-
-    h2 {
-      font-size: 1.4rem;
-      margin-top: 50px;
-      margin-bottom: 15px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 5px;
-    }
-
-    p {
-      color: var(--muted);
-      margin-bottom: 10px;
-    }
-
-    .mono {
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--accent);
-    }
+    .mono { font-family: 'JetBrains Mono', monospace; color: var(--accent); }
 
     .card {
       background: var(--card);
       padding: 20px;
       border: 1px solid var(--border);
       border-radius: 8px;
-      margin-bottom: 20px;
+      margin-top: 15px;
     }
 
     .tag {
       display: inline-block;
-      padding: 4px 8px;
       border: 1px solid var(--border);
-      border-radius: 5px;
-      margin: 5px 5px 0 0;
+      padding: 4px 8px;
+      margin: 4px;
       font-size: 12px;
       color: var(--muted);
     }
 
-    .job {
-      margin-bottom: 25px;
-    }
-
-    .job-title {
-      font-weight: 600;
-    }
-
-    .job-meta {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 5px;
-    }
-
-    ul {
-      padding-left: 18px;
-      color: var(--muted);
-    }
-
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .header {
-      margin-bottom: 40px;
-    }
-
-    .links a {
-      margin-right: 15px;
+    .toggle {
+      margin-top: 20px;
+      cursor: pointer;
       font-size: 14px;
+      color: var(--accent);
     }
 
-    .highlight {
-      color: var(--text);
-      font-weight: 500;
-    }
+    .hidden { display: none; }
+
+    a { color: var(--accent); text-decoration: none; }
   </style>
 </head>
 
 <body>
 
-  <div class="header">
-    <h1>Akshay Gudhate</h1>
-    <p class="mono">Backend Engineering Lead • Distributed Systems • Messaging Infrastructure</p>
+<h1>Akshay Gudhate</h1>
+<p class="mono">Backend Engineering Lead • Distributed Systems</p>
 
-    <div class="links">
-      <a href="mailto:akshay.gudhate@gmail.com">Email</a>
-      <a href="https://github.com/akshayGudhate">GitHub</a>
-      <a href="https://www.linkedin.com/in/akshay-gudhate/">LinkedIn</a>
-      <a href="https://medium.com/@akshaygudhate">Medium</a>
-    </div>
-  </div>
+<div class="toggle" onclick="toggleMode()">
+  Switch to <span id="modeLabel">Engineer Mode</span>
+</div>
 
-  <h2>About</h2>
-  <p>
-    Backend engineer focused on building <span class="highlight">data-intensive, distributed systems</span>.
-    I’ve spent 8+ years working in startup environments, taking products from 
-    <span class="mono">0 → 1</span> and scaling them into production-grade systems.
-  </p>
+<!-- ================= RECRUITER VIEW ================= -->
+<div id="recruiter">
 
-  <p>
-    Creator and architect of <span class="highlight">Bitamin</span> — a real-time messaging and workflow automation platform.
-  </p>
+<h2>Summary</h2>
+<p>
+Backend Engineering Lead with 8+ years of experience building scalable systems.
+Led development of a real-time messaging platform handling multi-channel automation.
+</p>
 
-  <h2>Core Work</h2>
+<h2>Key Impact</h2>
+<div class="card">
+<ul>
+<li>Improved message processing latency via system redesign</li>
+<li>Scaled messaging infrastructure for multi-channel workloads</li>
+<li>Led backend architecture for a production-scale platform</li>
+</ul>
+</div>
 
-  <div class="card">
-    <h3>Bitamin</h3>
-    <p>
-      Multi-channel automation platform powering messaging, workflows, and integrations.
-    </p>
+<h2>Experience</h2>
+<div class="card">
+<b>Technical Project Lead</b><br/>
+Three Matter Labs • 2025–Present
+<ul>
+<li>Leading system migration to high-performance architecture</li>
+<li>Driving platform scalability and reliability</li>
+</ul>
+</div>
 
-    <ul>
-      <li>Designed event-driven messaging architecture</li>
-      <li>Migrated Node.js → Golang</li>
-      <li>Replaced RabbitMQ with NATS</li>
-      <li>Built scalable webhook & workflow systems</li>
-    </ul>
+<div class="card">
+<b>Project Lead</b><br/>
+Biz Secure Labs • 2021–2025
+<ul>
+<li>Built backend platform from scratch</li>
+<li>Owned system design and engineering direction</li>
+</ul>
+</div>
 
-    <div>
-      <span class="tag">Golang</span>
-      <span class="tag">NATS</span>
-      <span class="tag">PostgreSQL</span>
-      <span class="tag">Distributed Systems</span>
-    </div>
-  </div>
+</div>
 
-  <h2>Experience</h2>
+<!-- ================= ENGINEER VIEW ================= -->
+<div id="engineer" class="hidden">
 
-  <div class="job">
-    <div class="job-title">Technical Project Lead</div>
-    <div class="job-meta">Three Matter Labs • 2025 — Present</div>
-    <ul>
-      <li>Re-architecting messaging systems for scale</li>
-      <li>Designing gRPC service communication</li>
-      <li>Building integration framework</li>
-    </ul>
-  </div>
+<h2>System Work</h2>
+<div class="card">
+<b>Bitamin Architecture</b>
+<ul>
+<li>Event-driven messaging pipeline</li>
+<li>NATS-based pub/sub system</li>
+<li>Multi-tenant schema design</li>
+<li>Webhook ingestion → queue → workflow engine</li>
+</ul>
+</div>
 
-  <div class="job">
-    <div class="job-title">Project Lead</div>
-    <div class="job-meta">Biz Secure Labs • 2021 — 2025</div>
-    <ul>
-      <li>Built messaging pipeline from scratch</li>
-      <li>Designed multi-tenant architecture</li>
-      <li>Optimized database performance</li>
-    </ul>
-  </div>
+<h2>Deep Work</h2>
+<div class="card">
+<ul>
+<li>Migration: Node.js → Golang (performance + concurrency)</li>
+<li>RabbitMQ → NATS (low latency, simpler topology)</li>
+<li>gRPC internal communication</li>
+<li>Async job orchestration</li>
+</ul>
+</div>
 
-  <div class="job">
-    <div class="job-title">Application Developer</div>
-    <div class="job-meta">IBM India • 2018 — 2019</div>
-    <ul>
-      <li>Worked with AT&T, IAG</li>
-      <li>Optimized SQL-heavy systems</li>
-    </ul>
-  </div>
+<h2>Tech Stack</h2>
+<div>
+<span class="tag">Golang</span>
+<span class="tag">NATS</span>
+<span class="tag">PostgreSQL</span>
+<span class="tag">Redis</span>
+<span class="tag">Docker</span>
+</div>
 
-  <h2>Tech Stack</h2>
+</div>
 
-  <div>
-    <span class="tag">Golang</span>
-    <span class="tag">Node.js</span>
-    <span class="tag">PostgreSQL</span>
-    <span class="tag">MongoDB</span>
-    <span class="tag">Redis</span>
-    <span class="tag">NATS</span>
-    <span class="tag">Kafka</span>
-    <span class="tag">Docker</span>
-    <span class="tag">AWS</span>
-  </div>
+<script>
+function toggleMode() {
+  const recruiter = document.getElementById("recruiter");
+  const engineer = document.getElementById("engineer");
+  const label = document.getElementById("modeLabel");
 
-  <h2>Writing</h2>
-  <p>
-    I write about backend systems, architecture, and real-world scaling challenges.
-  </p>
-
-  <h2>Contact</h2>
-  <p>Email: akshay.gudhate@gmail.com</p>
+  if (recruiter.classList.contains("hidden")) {
+    recruiter.classList.remove("hidden");
+    engineer.classList.add("hidden");
+    label.innerText = "Engineer Mode";
+  } else {
+    recruiter.classList.add("hidden");
+    engineer.classList.remove("hidden");
+    label.innerText = "Recruiter Mode";
+  }
+}
+</script>
 
 </body>
 </html>
