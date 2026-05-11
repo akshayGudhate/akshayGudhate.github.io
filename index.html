@@ -106,6 +106,7 @@
       display: flex;
       gap: 20px;
       flex-wrap: wrap;
+      align-items: center;
     }
 
     .hero-links a {
@@ -122,6 +123,27 @@
     .hero-links a:hover {
       color: var(--accent);
       border-color: var(--accent);
+    }
+
+    /* ── RESUME BUTTON ── */
+    .resume-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent) !important;
+      border: 1px solid rgba(249, 115, 22, 0.35) !important;
+      border-bottom: 1px solid rgba(249, 115, 22, 0.35) !important;
+      border-radius: 4px;
+      padding: 6px 14px 6px !important;
+      background: var(--accent-dim);
+      transition: background 0.2s, border-color 0.2s !important;
+    }
+
+    .resume-btn:hover {
+      background: rgba(249, 115, 22, 0.2) !important;
+      border-color: var(--accent) !important;
+      color: var(--accent) !important;
     }
 
     /* ── SECTION HEADS ── */
@@ -551,6 +573,7 @@
       <a href="https://github.com/akshayGudhate" target="_blank">GitHub</a>
       <a href="https://www.linkedin.com/in/akshay-gudhate/" target="_blank">LinkedIn</a>
       <a href="https://medium.com/@akshaygudhate" target="_blank">Medium</a>
+      <a href="https://drive.google.com/file/d/1PpCX9nBve4YOYpo0bK9APBf0AA8yxDBO/view?usp=drive_link" target="_blank" class="resume-btn">↓ Resume</a>
     </div>
   </div>
 
