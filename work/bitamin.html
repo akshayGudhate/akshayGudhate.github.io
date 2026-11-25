@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bitamin case study — Akshay Gudhate</title>
+    <meta name="description"
+        content="How Akshay Gudhate designed and built Bitamin, a real-time messaging and workflow automation platform, from scratch.">
+    <meta property="og:title" content="Building Bitamin from scratch — case study">
+    <meta property="og:description"
+        content="Real-time multi-channel messaging, workflow automation and third-party integrations built on Node.js and RabbitMQ, now migrated to Go, PostgreSQL, DBOS, NATS and R2.">
+    <meta property="og:type" content="article">
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body id="top">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="../index.html"><span class="brand-mark">AG</span><span class="brand-name">Akshay Gudhate</span></a>
+            <nav class="topnav">
+                <a href="../index.html#work">Work</a>
+                <a href="../index.html#experience">Experience</a>
+                <a href="../index.html#contact">Contact</a>
+            </nav>
+            <a class="resume-btn" href="https://drive.google.com/file/d/1PpCX9nBve4YOYpo0bK9APBf0AA8yxDBO/view?usp=drive_link" target="_blank" rel="noopener">↓ Resume</a>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- CASE STUDY HERO -->
+        <div class="hero cs-hero">
+            <a class="cs-back" href="../index.html#work">← All work</a>
+            <div class="hero-eyebrow"><span class="dot"></span>Case study<span class="sep">/</span>B2B SaaS · Messaging</div>
+            <h1>Building <em>Bitamin</em> from scratch</h1>
+            <p class="hero-desc">A real-time messaging and workflow automation platform for multi-channel
+                communication (WhatsApp, Instagram) and third-party integrations — designed, built and shipped as
+                the backend project lead at Biz Secure Labs. Since 2025 I've been leading its
+                <a class="inline-link" href="messaging-migration.html">migration to Go, PostgreSQL, DBOS, NATS and
+                    Cloudflare R2</a> at Three Matter Labs.</p>
+
+            <div class="cs-meta">
+                <div><span>Role</span>Project Lead — Backend Platform</div>
+                <div><span>Timeline</span>2021 — present</div>
+                <div><span>Original stack</span>Node.js · RabbitMQ · PostgreSQL · Redis</div>
+                <div><span>Current stack</span>Go · PostgreSQL · DBOS · NATS · Cloudflare R2</div>
+                <div><span>Scope</span>Architecture, data model, service topology, team mentoring</div>
+            </div>
+        </div>
+
+        <!-- IMPACT -->
+        <section>
+            <div class="section-label">Impact at a glance</div>
+            <div class="stats-grid">
+                <div class="stat">
+                    <div class="stat-num">&lt; 6 mo</div>
+                    <div class="stat-label">From empty repo to production</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">5+</div>
+                    <div class="stat-label">External integrations behind one adapter contract</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROBLEM -->
+        <section>
+            <div class="section-label">The problem</div>
+            <h2>Many channels, many tenants, one platform</h2>
+            <p class="summary-text">Messages arrive from several channels at once, as webhooks, often in bursts.
+                Every tenant has its own workflows and its own third-party tools. The platform has to accept every
+                event, run the right workflow, and talk to CRMs and payment providers — without one busy tenant or
+                one broken external API slowing everyone else down.</p>
+        </section>
+
+        <!-- ARCHITECTURE -->
+        <section>
+            <div class="section-label">Architecture</div>
+            <h2>How an event moved through the original system</h2>
+            <p class="section-intro">Ingestion is separated from processing by RabbitMQ, so bursts queue up instead of
+                piling onto the workflow engine.</p>
+            <div class="arch-flow">
+                <div class="flow-line">
+                    <span class="node">WhatsApp / Instagram</span>
+                    <span class="arrow">→</span>
+                    <span class="node">Ingestion Service</span>
+                    <span class="arrow">→</span>
+                    <span class="node">RabbitMQ</span>
+                    <span class="arrow">→</span>
+                    <span class="node">Worker Pool</span>
+                    <span class="arrow">→</span>
+                    <span class="node">Workflow Engine</span>
+                </div>
+                <div class="flow-line" style="margin-top: 10px;">
+                    <span class="node">Workflow Engine</span>
+                    <span class="arrow">→</span>
+                    <span class="node">Integration Adapters</span>
+                    <span class="arrow">→</span>
+                    <span class="node">Zoho / Razorpay / IndiaMART</span>
+                </div>
+                <div class="flow-line" style="margin-top: 10px;">
+                    <span class="node">All Services</span>
+                    <span class="arrow">↔</span>
+                    <span class="node">PostgreSQL</span>
+                    <span class="arrow">+</span>
+                    <span class="node">Redis (cache + ephemeral state)</span>
+                </div>
+                <div class="flow-label">Each tenant runs with isolated workflow configuration and data boundaries.</div>
+                <div class="flow-label">This is the original Node.js + RabbitMQ design. The Go + NATS + DBOS version is
+                    covered in the <a class="inline-link" href="messaging-migration.html">migration case study</a>.</div>
+            </div>
+        </section>
+
+        <!-- INSIGHT -->
+        <section id="integrations">
+            <div class="section-label">The insight that changed my approach</div>
+            <h2>Integrations belong behind a contract</h2>
+            <div class="decisions">
+                <div class="decision">
+                    <span class="decision-tag neutral">Design</span>
+                    <div>
+                        <h3>Integration Adapter Pattern</h3>
+                        <p>Wrote the first three integrations directly against core messaging logic — a mistake I
+                            corrected quickly. Built a typed adapter interface so all third-party connectors are
+                            isolated behind a contract. New integrations now ship without modifying the workflow engine
+                            at all, and failures in one adapter cannot cascade.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAILURE -->
+        <section>
+            <div class="section-label">When things go wrong</div>
+            <h2>Designing for failure, not just the happy path</h2>
+            <ul class="tl-bullets cs-list">
+                <li><strong>Async jobs with retry semantics</strong> — work that fails is retried by the job system,
+                    not lost or retried by hand.</li>
+                <li><strong>Failure isolation between integrations</strong> — a slow or failing third-party API stays
+                    inside its own adapter and cannot cascade into messaging.</li>
+                <li><strong>Tenant boundaries</strong> — each tenant runs with isolated workflow configuration and
+                    data boundaries.</li>
+                <li><strong>Hot-path database work</strong> — query profiling, composite indexes and materialized
+                    views where reads were heaviest.</li>
+            </ul>
+        </section>
+
+        <!-- LESSONS -->
+        <section>
+            <div class="section-label">What this project taught me</div>
+            <div class="currently-box">
+                <div class="dot-live"></div>
+                <p><strong>Complexity should live in the infrastructure, not the application layer.</strong> A good
+                    event bus, adapter interface or job queue absorbs the hard parts, so the services built on top
+                    stay simple. And the cheapest time to put a contract in place is before the third integration,
+                    not after.</p>
+            </div>
+        </section>
+
+        <!-- NEXT -->
+        <section class="contact">
+            <div class="section-label">Next</div>
+            <h2 class="contact-title">Want the <em>details?</em></h2>
+            <p class="section-intro">Happy to walk through the architecture, the trade-offs, or what I'd do
+                differently.</p>
+            <div class="hero-links" style="margin-top: 22px;">
+                <a href="../index.html#work">← Back to all work</a>
+                <a href="mailto:akshay.gudhate@gmail.com">akshay.gudhate@gmail.com</a>
+                <a href="https://drive.google.com/file/d/1PpCX9nBve4YOYpo0bK9APBf0AA8yxDBO/view?usp=drive_link" target="_blank" rel="noopener" class="resume-btn">↓ Resume</a>
+            </div>
+        </section>
+
+        <footer>
+            <p>Akshay Gudhate · Pune, India · <a href="mailto:akshay.gudhate@gmail.com">akshay.gudhate@gmail.com</a></p>
+        </footer>
+
+    </div>
+</body>
+
+</html>

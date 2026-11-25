@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bitamin migration case study — Akshay Gudhate</title>
+    <meta name="description"
+        content="How Akshay Gudhate is leading the move of a live messaging platform of Bitamin from Node.js + RabbitMQ to Go, PostgreSQL, DBOS, NATS and Cloudflare R2 at Three Matter Labs.">
+    <meta property="og:title" content="Moving Bitamin to Go, NATS and DBOS — case study">
+    <meta property="og:description"
+        content="Node.js + RabbitMQ → Go, PostgreSQL, DBOS, NATS and R2, with typed gRPC contracts and a high-availability topology.">
+    <meta property="og:type" content="article">
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body id="top">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="../index.html"><span class="brand-mark">AG</span><span class="brand-name">Akshay Gudhate</span></a>
+            <nav class="topnav">
+                <a href="../index.html#work">Work</a>
+                <a href="../index.html#experience">Experience</a>
+                <a href="../index.html#contact">Contact</a>
+            </nav>
+            <a class="resume-btn" href="https://drive.google.com/file/d/1PpCX9nBve4YOYpo0bK9APBf0AA8yxDBO/view?usp=drive_link" target="_blank" rel="noopener">↓ Resume</a>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- CASE STUDY HERO -->
+        <div class="hero cs-hero">
+            <a class="cs-back" href="../index.html#work">← All work</a>
+            <div class="hero-eyebrow"><span class="dot"></span>Case study<span class="sep">/</span>Platform Migration</div>
+            <h1>Moving Bitamin to <em>Go, NATS and DBOS</em></h1>
+            <p class="hero-desc">Leading the full re-architecture of <a class="inline-link"
+                    href="bitamin.html">Bitamin</a>, a live messaging platform, from Node.js + RabbitMQ to Go,
+                PostgreSQL, DBOS, NATS and Cloudflare R2 — for better concurrency, crash-safe workflows, a smaller
+                operational surface, and typed contracts between services.</p>
+
+            <div class="cs-meta">
+                <div><span>Role</span>Technical Project Lead</div>
+                <div><span>Company</span>Three Matter Labs</div>
+                <div><span>Timeline</span>2025 — in progress</div>
+                <div><span>Stack</span>Go · PostgreSQL · DBOS · NATS · Cloudflare R2 · gRPC</div>
+            </div>
+        </div>
+
+        <!-- BEFORE / AFTER -->
+        <section>
+            <div class="section-label">Before and after</div>
+            <h2>What changes</h2>
+            <div class="arch-flow">
+                <div class="flow-line">
+                    <span class="cs-tag">Before</span>
+                    <span class="node dim">Node.js services</span>
+                    <span class="arrow">→</span>
+                    <span class="node dim">RabbitMQ exchanges + bindings</span>
+                    <span class="arrow">→</span>
+                    <span class="node dim">Consumers</span>
+                </div>
+                <div class="flow-line" style="margin-top: 10px;">
+                    <span class="cs-tag">After</span>
+                    <span class="node">Go services</span>
+                    <span class="arrow">→</span>
+                    <span class="node">NATS</span>
+                    <span class="arrow">→</span>
+                    <span class="node">Distributed consumer groups</span>
+                </div>
+                <div class="flow-line" style="margin-top: 10px;">
+                    <span class="cs-tag">Workflows</span>
+                    <span class="node dim">Async jobs + retries</span>
+                    <span class="arrow">→</span>
+                    <span class="node">DBOS durable workflows on PostgreSQL</span>
+                </div>
+                <div class="flow-line" style="margin-top: 10px;">
+                    <span class="cs-tag">Object storage</span>
+                    <span class="node">Cloudflare R2</span>
+                </div>
+                <div class="flow-line" style="margin-top: 10px;">
+                    <span class="cs-tag">Between services</span>
+                    <span class="node dim">REST over HTTP/1.1</span>
+                    <span class="arrow">→</span>
+                    <span class="node">gRPC + protobuf contracts</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHY -->
+        <section id="decisions">
+            <div class="section-label">Key decisions</div>
+            <h2>Why migrate at all</h2>
+            <p class="section-intro">I knew this stack's limits first-hand: I built <a class="inline-link"
+                    href="bitamin.html">Bitamin</a> on Node.js + RabbitMQ at Biz Secure Labs and ran it in production
+                from 2021 to 2025. These decisions come from operating it, not from reading about it.</p>
+            <div class="decisions">
+                <div class="decision">
+                    <span class="decision-tag">Migration</span>
+                    <div>
+                        <h3>Node.js → Golang</h3>
+                        <p>Node.js handled early product velocity well, but goroutines gave us true concurrency for
+                            high-throughput workloads — particularly processing thousands of simultaneous webhook events
+                            without the event loop becoming a bottleneck. The switch also eliminated an entire class of
+                            callback-complexity bugs.</p>
+                    </div>
+                </div>
+
+                <div class="decision">
+                    <span class="decision-tag">Migration</span>
+                    <div>
+                        <h3>RabbitMQ → NATS</h3>
+                        <p>RabbitMQ's exchange/binding model added operational surface area with limited upside for our
+                            use case. NATS gave us lower latency, a simpler topology, and drastically reduced
+                            operational overhead — no broker management, no complex routing configuration to maintain.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="decision">
+                    <span class="decision-tag">Migration</span>
+                    <div>
+                        <h3>Async jobs → DBOS durable workflows</h3>
+                        <p>Long-running work like multi-step workflows and third-party calls now runs as DBOS
+                            workflows. Each step is checkpointed in PostgreSQL, so a crash or deploy resumes the
+                            workflow exactly where it stopped instead of re-running or losing it — and there is no
+                            separate orchestrator cluster to operate, because the state lives in the database we
+                            already run.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTRACTS -->
+        <section>
+            <div class="section-label">Service contracts</div>
+            <h2>Typed interfaces between services</h2>
+            <div class="decisions">
+                <div class="decision">
+                    <span class="decision-tag neutral">Design</span>
+                    <div>
+                        <h3>gRPC for Internal Services</h3>
+                        <p>REST over HTTP/1.1 was adding latency on the hot path between internal services. gRPC with
+                            protobuf contracts gave us typed interfaces, lower serialization overhead, and
+                            bi-directional streaming support for real-time analytics pipelines currently in development.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- IN PROGRESS -->
+        <section>
+            <div class="section-label">Where it is now</div>
+            <h2>What I'm driving next</h2>
+            <ul class="tl-bullets cs-list">
+                <li><strong>High availability</strong> — a distributed consumer-group topology and graceful failover
+                    under load for the next availability tier.</li>
+                <li><strong>gRPC contracts across the platform</strong> — typed, low-latency internal communication
+                    that also opens the door to real-time analytics.</li>
+                <li><strong>Engineering standards</strong> — code review process, service design principles, and
+                    on-call runbooks for production readiness.</li>
+            </ul>
+        </section>
+
+        <!-- LESSON -->
+        <section>
+            <div class="section-label">How I run migrations</div>
+            <div class="currently-box">
+                <div class="dot-live"></div>
+                <p><strong>Migrations are a product problem, not just a technical one.</strong> I make the case
+                    clearly — what changes, what the risk is, what the team gets in return — and then execute
+                    incrementally instead of in one big switch.</p>
+            </div>
+        </section>
+
+        <!-- NEXT -->
+        <section class="contact">
+            <div class="section-label">Next</div>
+            <h2 class="contact-title">Want the <em>details?</em></h2>
+            <p class="section-intro">Happy to walk through the trade-offs, the rollout plan, or what I'd do
+                differently.</p>
+            <div class="hero-links" style="margin-top: 22px;">
+                <a href="../index.html#work">← Back to all work</a>
+                <a href="mailto:akshay.gudhate@gmail.com">akshay.gudhate@gmail.com</a>
+                <a href="https://drive.google.com/file/d/1PpCX9nBve4YOYpo0bK9APBf0AA8yxDBO/view?usp=drive_link" target="_blank" rel="noopener" class="resume-btn">↓ Resume</a>
+            </div>
+        </section>
+
+        <footer>
+            <p>Akshay Gudhate · Pune, India · <a href="mailto:akshay.gudhate@gmail.com">akshay.gudhate@gmail.com</a></p>
+        </footer>
+
+    </div>
+</body>
+
+</html>
