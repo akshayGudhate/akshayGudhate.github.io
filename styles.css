@@ -1138,7 +1138,7 @@ section:nth-child(5) {
 .contact-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 10px;
     margin-top: 28px;
 }
 
@@ -1146,77 +1146,83 @@ section:nth-child(5) {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 16px 18px;
+    padding: 14px 16px;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 8px;
     text-decoration: none;
     color: var(--text);
     min-width: 0;
-    transition: border-color 0.2s, transform 0.2s, background 0.2s;
+    transition: border-color 0.2s;
 }
 
 .contact-card:hover {
-    border-color: rgba(249, 115, 22, 0.45);
-    transform: translateY(-2px);
+    border-color: var(--faint);
 }
 
 .contact-card.primary {
     grid-column: 1 / -1;
-    background: var(--accent-dim);
     border-color: rgba(249, 115, 22, 0.3);
 }
 
+.contact-card.primary:hover {
+    border-color: rgba(249, 115, 22, 0.6);
+}
+
 .cc-icon {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     flex-shrink: 0;
     display: grid;
     place-items: center;
-    border-radius: 8px;
-    background: var(--accent-dim);
-    color: var(--accent);
-    border: 1px solid rgba(249, 115, 22, 0.2);
-}
-
-.contact-card.primary .cc-icon {
-    background: var(--accent);
-    color: var(--bg);
+    border-radius: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    transition: color 0.2s, border-color 0.2s;
 }
 
 .cc-icon svg {
-    width: 19px;
-    height: 19px;
+    width: 18px;
+    height: 18px;
+}
+
+.contact-card:hover .cc-icon,
+.contact-card.primary .cc-icon {
+    color: var(--accent);
+}
+
+.contact-card.primary .cc-icon {
+    background: var(--accent-dim);
+    border-color: rgba(249, 115, 22, 0.25);
 }
 
 .cc-text {
     display: flex;
     flex-direction: column;
+    gap: 2px;
     min-width: 0;
     flex: 1;
 }
 
 .cc-label {
     font-family: 'DM Mono', monospace;
-    font-size: 0.64rem;
+    font-size: 0.62rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--muted);
 }
 
 .cc-value {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
+    color: var(--text);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.contact-card.primary .cc-value {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(1.1rem, 3vw, 1.45rem);
-}
-
 .cc-arrow {
+    font-size: 0.85rem;
     color: var(--faint);
     transition: color 0.2s;
 }
